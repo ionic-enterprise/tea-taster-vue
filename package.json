@@ -5,7 +5,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "vue-tsc && vite build",
+    "assets": "capacitor-assets generate --iconBackgroundColor '#f1ebe1' --splashBackgroundColor '#f1ebe1' --iconBackgroundColorDark '#110b00' --splashBackgroundColorDark '#110b00'",
+    "build": "vue-tsc && vite build && cap sync",
     "dev": "vite",
     "lint": "eslint",
     "prepare": "husky install",
@@ -16,9 +17,11 @@
     "test:e2e": "cypress run"
   },
   "dependencies": {
+    "@capacitor/android": "4.7.3",
     "@capacitor/app": "4.1.1",
     "@capacitor/core": "4.7.3",
     "@capacitor/haptics": "4.1.0",
+    "@capacitor/ios": "4.7.3",
     "@capacitor/keyboard": "4.1.1",
     "@capacitor/status-bar": "4.1.1",
     "@ionic/vue": "^7.0.0",
@@ -28,6 +31,7 @@
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@capacitor/assets": "~2.0.4",
     "@capacitor/cli": "4.7.3",
     "@ionic/prettier-config": "~2.0.0",
     "@vitejs/plugin-vue": "^4.0.0",
