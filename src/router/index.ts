@@ -8,6 +8,11 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/teas',
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/LoginPage.vue'),
+  },
+  {
     path: '/teas',
     name: 'Tea List',
     component: TeaListPage,
