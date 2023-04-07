@@ -32,9 +32,18 @@
       ></ion-input>
     </ion-content>
 
+    <ion-toast
+      :isOpen="loginFailed"
+      message="Invalid Email or Password!"
+      color="danger"
+      :duration="3000"
+      position="middle"
+      @didDismiss="loginFailed = false"
+    ></ion-toast>
+
     <ion-footer>
       <ion-toolbar>
-        <ion-button expand="full" :disabled="formIsInvalid" data-testid="signin-button">
+        <ion-button expand="full" :disabled="formIsInvalid" @click="signinClicked" data-testid="signin-button">
           Sign In
           <ion-icon slot="end" :icon="logInOutline"></ion-icon>
         </ion-button>
@@ -53,15 +62,19 @@ import {
   IonInput,
   IonPage,
   IonTitle,
+  IonToast,
   IonToolbar,
 } from '@ionic/vue';
 import { logInOutline } from 'ionicons/icons';
 import { useForm, useField } from 'vee-validate';
 import { object as yupObject, string as yupString } from 'yup';
 import { computed, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuth } from '@/composables/auth';
 
 const emailInput = ref(null);
 const passwordInput = ref(null);
+const loginFailed = ref(false);
 
 const validationSchema = yupObject({
   email: yupString().email().required().label('Email Address'),
@@ -100,5 +113,16 @@ const setValid = (el?: Element) => {
 
 const markTouched = (evt: Event) => {
   (evt.target as Element).classList.add('ion-touched');
+};
+
+const { login } = useAuth();
+const router = useRouter();
+
+const signinClicked = async () => {
+  if (await login(email.value, password.value)) {
+    router.replace('/');
+  } else {
+    loginFailed.value = true;
+  }
 };
 </script>

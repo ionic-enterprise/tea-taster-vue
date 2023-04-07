@@ -3,6 +3,11 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-title>Teas</ion-title>
+        <ion-buttons slot="end">
+          <ion-button data-testid="logout-button" @click="logoutClicked">
+            <ion-icon slot="icon-only" :icon="logOutOutline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
@@ -31,8 +36,11 @@
 </template>
 
 <script setup lang="ts">
+import { useAuth } from '@/composables/auth';
 import { Tea } from '@/models';
 import {
+  IonButton,
+  IonButtons,
   IonCard,
   IonCol,
   IonCardContent,
@@ -41,13 +49,16 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
+  IonIcon,
   IonImg,
   IonPage,
   IonRow,
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
+import { logOutOutline } from 'ionicons/icons';
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const teaData = ref<Array<Tea>>([
   {
@@ -124,6 +135,14 @@ const teaRows = computed((): Array<Array<Tea>> => {
   }
   return teaMatrix;
 });
+
+const { logout } = useAuth();
+const router = useRouter();
+
+const logoutClicked = async (): Promise<void> => {
+  await logout();
+  router.replace('/login');
+};
 </script>
 
 <style scoped>
