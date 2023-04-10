@@ -32,6 +32,47 @@ describe('useTea', () => {
     });
   });
 
+  describe('find', () => {
+    const { client } = useBackendAPI();
+    const { find, refresh, teas } = useTea();
+
+    beforeEach(() => {
+      vi.resetAllMocks();
+      teas.value = [];
+      (client.get as Mock).mockResolvedValue({ data: httpResultTeas });
+    });
+
+    it('refreshes the tea data if it has not been loaded yet', async () => {
+      const t = await find(6);
+      expect(teas.value.length).toEqual(8);
+      expect(t).toEqual({
+        id: 6,
+        name: 'Puer',
+        image: 'img/puer.jpg',
+        description: 'Puer tea description.',
+      });
+      expect(client.get).toHaveBeenCalledTimes(1);
+      expect(client.get).toHaveBeenCalledWith('/tea-categories');
+    });
+
+    it('finds the tea from the existing teas', async () => {
+      await refresh();
+      vi.clearAllMocks();
+      const t = await find(4);
+      expect(t).toEqual({
+        id: 4,
+        name: 'Oolong',
+        image: 'img/oolong.jpg',
+        description: 'Oolong tea description.',
+      });
+      expect(client.get).not.toHaveBeenCalled();
+    });
+
+    it('returns undefined if the tea does not exist', async () => {
+      expect(await find(42)).toBeUndefined();
+    });
+  });
+
   const initializeTestData = () => {
     expectedTeas = [
       {

@@ -1,6 +1,7 @@
 import { useAuth } from '@/composables/auth';
 import { useTea } from '@/composables/tea';
 import TeaListPage from '@/views/TeaListPage.vue';
+import { IonCard, IonTitle } from '@ionic/vue';
 import { mount, VueWrapper } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Router, createRouter, createWebHistory } from 'vue-router';
@@ -90,7 +91,7 @@ describe('tea list page', () => {
 
   it('displays the title', async () => {
     const wrapper = await mountView();
-    const titles = wrapper.findAll('ion-title');
+    const titles = wrapper.findAllComponents(IonTitle);
     expect(titles).toHaveLength(2);
     expect(titles[0].text()).toBe('Teas');
     expect(titles[1].text()).toBe('Teas');
@@ -139,6 +140,15 @@ describe('tea list page', () => {
         const title = c.find('ion-card ion-card-content');
         expect(title.text()).toBe(teas.value[idx].description);
       });
+    });
+
+    it('navigates to the tea details page when a tea card is clicked', async () => {
+      const wrapper = await mountView();
+      const cards = wrapper.findAllComponents(IonCard);
+      router.push = vi.fn();
+      cards[3].trigger('click');
+      expect(router.push).toHaveBeenCalledTimes(1);
+      expect(router.push).toHaveBeenCalledWith('/teas/tea/4');
     });
   });
 

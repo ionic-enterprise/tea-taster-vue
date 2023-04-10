@@ -1,5 +1,6 @@
 import { useAuth } from '@/composables/auth';
 import LoginPage from '@/views/LoginPage.vue';
+import { IonTitle } from '@ionic/vue';
 import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
 import { describe, expect, it, Mock, vi } from 'vitest';
 import { Router, createRouter, createWebHistory } from 'vue-router';
@@ -26,7 +27,7 @@ describe('LoginPage.vue', () => {
 
   it('displays the title', async () => {
     const wrapper = await mountView();
-    const titles = wrapper.findAllComponents('ion-title') as Array<VueWrapper>;
+    const titles = wrapper.findAllComponents(IonTitle) as Array<VueWrapper>;
     expect(titles).toHaveLength(1);
     expect(titles[0].text()).toBe('Login');
   });

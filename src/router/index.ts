@@ -18,6 +18,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/TeaListPage.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/teas/tea/:id',
+    name: 'Tea Details',
+    component: () => import('@/views/TeaDetailsPage.vue'),
+    meta: { requiresAuth: true },
+  },
 ];
 
 const { getSession } = useSession();
