@@ -36,6 +36,7 @@ describe('tea list page', () => {
         description:
           'Green teas have the oxidation process stopped very early on, leaving them with a very subtle flavor and ' +
           'complex undertones. These teas should be steeped at lower temperatures for shorter periods of time.',
+        rating: 0,
       },
       {
         id: 2,
@@ -44,6 +45,7 @@ describe('tea list page', () => {
         description:
           'A fully oxidized tea, black teas have a dark color and a full robust and pronounced flavor. Black teas tend ' +
           'to have a higher caffeine content than other teas.',
+        rating: 0,
       },
       {
         id: 3,
@@ -52,6 +54,7 @@ describe('tea list page', () => {
         description:
           'Herbal infusions are not actually "tea" but are more accurately characterized as infused beverages ' +
           'consisting of various dried herbs, spices, and fruits.',
+        rating: 4,
       },
       {
         id: 4,
@@ -60,6 +63,7 @@ describe('tea list page', () => {
         description:
           'Oolong teas are partially oxidized, giving them a flavor that is not as robust as black teas but also ' +
           'not as subtle as green teas. Oolong teas often have a flowery fragrance.',
+        rating: 3,
       },
       {
         id: 5,
@@ -68,6 +72,7 @@ describe('tea list page', () => {
         description:
           'From the Hunan and Sichuan provinces of China, dark teas are flavorful aged probiotic teas that steeps ' +
           'up very smooth with slightly sweet notes.',
+        rating: 0,
       },
       {
         id: 6,
@@ -75,6 +80,7 @@ describe('tea list page', () => {
         image: 'img/puer.jpg',
         description:
           'An aged black tea from china. Puer teas have a strong rich flavor that could be described as "woody" or "peaty."',
+        rating: 5,
       },
       {
         id: 7,
@@ -84,6 +90,7 @@ describe('tea list page', () => {
           'White tea is produced using very young shoots with no oxidation process. White tea has an extremely ' +
           'delicate flavor that is sweet and fragrant. White tea should be steeped at lower temperatures for ' +
           'short periods of time.',
+        rating: 0,
       },
     ];
     vi.resetAllMocks();

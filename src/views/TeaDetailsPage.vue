@@ -16,7 +16,7 @@
         </div>
         <h1 data-testid="name">{{ tea.name }}</h1>
         <p data-testid="description">{{ tea.description }}</p>
-        <app-rating data-testid="rating" v-model="rating"></app-rating>
+        <app-rating data-testid="rating" v-model="rating" @click="ratingClicked"></app-rating>
       </div>
     </ion-content>
   </ion-page>
@@ -35,8 +35,17 @@ const id = parseInt(params.id as string, 10);
 const tea = ref<Tea | undefined>();
 const rating = ref<number>(3);
 
-const { find } = useTea();
-find(id).then((t) => (tea.value = t));
+const { find, rate } = useTea();
+find(id).then((t) => {
+  tea.value = t;
+  rating.value = t?.rating || 0;
+});
+
+const ratingClicked = async () => {
+  if (tea.value) {
+    rate(tea.value.id, rating.value);
+  }
+};
 </script>
 
 <style scoped>
