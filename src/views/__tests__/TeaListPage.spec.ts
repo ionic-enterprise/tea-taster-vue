@@ -155,7 +155,7 @@ describe('tea list page', () => {
       router.push = vi.fn();
       cards[3].trigger('click');
       expect(router.push).toHaveBeenCalledTimes(1);
-      expect(router.push).toHaveBeenCalledWith('/teas/tea/4');
+      expect(router.push).toHaveBeenCalledWith('/tabs/teas/tea/4');
     });
   });
 

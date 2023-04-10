@@ -21,7 +21,7 @@
       <ion-grid>
         <ion-row class="ion-align-items-stretch" v-for="(row, index) in teaRows" :key="index">
           <ion-col v-for="tea of row" size="12" size-md="6" size-xl="3" :key="tea.id">
-            <ion-card button @click="$router.push(`/teas/tea/${tea.id}`)">
+            <ion-card button @click="$router.push(`/tabs/teas/tea/${tea.id}`)">
               <ion-img :src="tea.image"></ion-img>
               <ion-card-header>
                 <ion-card-title>{{ tea.name }}</ion-card-title>

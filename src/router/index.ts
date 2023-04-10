@@ -1,11 +1,12 @@
 import { useSession } from '@/composables/session';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
+import TabsPage from '@/views/TabsPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/teas',
+    redirect: '/tabs/teas',
   },
   {
     path: '/login',
@@ -13,16 +14,38 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/LoginPage.vue'),
   },
   {
-    path: '/teas',
-    name: 'Tea List',
-    component: () => import('@/views/TeaListPage.vue'),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/teas/tea/:id',
-    name: 'Tea Details',
-    component: () => import('@/views/TeaDetailsPage.vue'),
-    meta: { requiresAuth: true },
+    path: '/tabs/',
+    component: TabsPage,
+    children: [
+      {
+        path: '',
+        redirect: '/tabs/teas',
+      },
+      {
+        path: 'about',
+        name: 'About',
+        component: () => import('@/views/AboutPage.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'tasting-notes',
+        name: 'Tasting Notes',
+        component: () => import('@/views/TastingNotesPage.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'teas',
+        name: 'Tea List',
+        component: () => import('@/views/TeaListPage.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'teas/tea/:id',
+        name: 'Tea Details',
+        component: () => import('@/views/TeaDetailsPage.vue'),
+        meta: { requiresAuth: true },
+      },
+    ],
   },
 ];
 

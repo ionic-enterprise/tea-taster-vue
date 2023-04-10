@@ -4,7 +4,7 @@
       <ion-toolbar>
         <ion-title>Tea Details</ion-title>
         <ion-buttons slot="start">
-          <ion-back-button defaultHref="/teas" />
+          <ion-back-button defaultHref="/tabs/teas" />
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
