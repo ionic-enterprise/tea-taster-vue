@@ -16,6 +16,7 @@
         </div>
         <h1 data-testid="name">{{ tea.name }}</h1>
         <p data-testid="description">{{ tea.description }}</p>
+        <app-rating data-testid="rating" v-model="rating"></app-rating>
       </div>
     </ion-content>
   </ion-page>
@@ -27,10 +28,12 @@ import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { Tea } from '@/models';
 import { useTea } from '@/composables/tea';
+import AppRating from '@/components/AppRating.vue';
 
 const { params } = useRoute();
 const id = parseInt(params.id as string, 10);
 const tea = ref<Tea | undefined>();
+const rating = ref<number>(3);
 
 const { find } = useTea();
 find(id).then((t) => (tea.value = t));
