@@ -6,7 +6,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
+    <ion-content class="ion-padding main-content">
       <ion-input
         ref="emailInput"
         type="email"
@@ -42,7 +42,7 @@
     ></ion-toast>
 
     <ion-footer>
-      <ion-toolbar>
+      <ion-toolbar color="secondary">
         <ion-button expand="full" :disabled="formIsInvalid" @click="signinClicked" data-testid="signin-button">
           Sign In
           <ion-icon slot="end" :icon="logInOutline"></ion-icon>
