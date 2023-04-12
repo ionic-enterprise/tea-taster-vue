@@ -1,11 +1,11 @@
 import { useAuth } from '@/composables/auth';
 import { useBackendAPI } from '@/composables/backend-api';
-import { useSession } from '@/composables/session';
+import { useSessionVault } from '@/composables/session-vault';
 import { User } from '@/models';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 vi.mock('@/composables/backend-api');
-vi.mock('@/composables/session');
+vi.mock('@/composables/session-vault');
 
 describe('useAuth', () => {
   beforeEach(() => {
@@ -60,8 +60,8 @@ describe('useAuth', () => {
 
       it('sets the session', async () => {
         await login('test@test.com', 'password');
-        expect(useSession().setSession).toHaveBeenCalledTimes(1);
-        expect(useSession().setSession).toHaveBeenCalledWith({
+        expect(useSessionVault().setSession).toHaveBeenCalledTimes(1);
+        expect(useSessionVault().setSession).toHaveBeenCalledWith({
           user,
           token: '123456789',
         });
@@ -81,7 +81,7 @@ describe('useAuth', () => {
 
     it('clears the session', async () => {
       await logout();
-      expect(useSession().clearSession).toHaveBeenCalledTimes(1);
+      expect(useSessionVault().clearSession).toHaveBeenCalledTimes(1);
     });
   });
 });

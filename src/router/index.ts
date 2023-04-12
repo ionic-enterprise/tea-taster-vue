@@ -1,12 +1,13 @@
-import { useSession } from '@/composables/session';
+import { useSessionVault } from '@/composables/session-vault';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
-import TabsPage from '@/views/TabsPage.vue';
+import StartPage from '@/views/StartPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/tabs/teas',
+    name: 'Startup',
+    component: StartPage,
   },
   {
     path: '/login',
@@ -14,8 +15,13 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/LoginPage.vue'),
   },
   {
+    path: '/unlock',
+    name: 'Unlock',
+    component: () => import('@/views/UnlockPage.vue'),
+  },
+  {
     path: '/tabs/',
-    component: TabsPage,
+    component: () => import('@/views/TabsPage.vue'),
     children: [
       {
         path: '',
@@ -49,16 +55,17 @@ const routes: Array<RouteRecordRaw> = [
   },
 ];
 
-const { getSession } = useSession();
-
 const checkAuthStatus = async (
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) => {
-  const session = await getSession();
-  if (!session && to.matched.some((r) => r.meta.requiresAuth)) {
-    return next('/login');
+  if (to.matched.some((r) => r.meta.requiresAuth)) {
+    const { getSession } = useSessionVault();
+    const session = await getSession();
+    if (!session) {
+      return next('/login');
+    }
   }
   next();
 };

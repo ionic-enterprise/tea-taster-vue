@@ -1,11 +1,11 @@
 <template>
-  <ion-page>
+  <ion-page ref="page">
     <ion-header>
       <ion-toolbar>
         <ion-title>About Tea Taster</ion-title>
         <ion-buttons slot="end">
-          <ion-button data-testid="logout-button" @click="logoutClicked">
-            <ion-icon slot="icon-only" :icon="logOutOutline"></ion-icon>
+          <ion-button data-testid="logout-button" @click="preferencesClicked">
+            <ion-icon slot="icon-only" :icon="settingsOutline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -50,20 +50,19 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  modalController,
 } from '@ionic/vue';
-import { logOutOutline } from 'ionicons/icons';
+import { settingsOutline } from 'ionicons/icons';
+import { ref } from 'vue';
 import packageInfo from '../../package.json';
-import { useAuth } from '@/composables/auth';
-import { useRouter } from 'vue-router';
+import AppPreferences from '@/components/AppPreferences.vue';
 
 const { author, description, name, version } = packageInfo;
+const page = ref(null);
 
-const { logout } = useAuth();
-const router = useRouter();
-
-const logoutClicked = async (): Promise<void> => {
-  await logout();
-  router.replace('/login');
+const preferencesClicked = async (): Promise<void> => {
+  const modal = await modalController.create({ component: AppPreferences, presentingElement: (page.value as any).$el });
+  await modal.present();
 };
 </script>
 

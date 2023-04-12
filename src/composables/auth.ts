@@ -1,8 +1,8 @@
 import { useBackendAPI } from './backend-api';
-import { useSession } from './session';
+import { useSessionVault } from './session-vault';
 
 const { client } = useBackendAPI();
-const { clearSession, setSession } = useSession();
+const { clearSession, setSession } = useSessionVault();
 
 const login = async (email: string, password: string): Promise<boolean> => {
   const response = await client.post('/login', { username: email, password });

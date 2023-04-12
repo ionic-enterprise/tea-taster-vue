@@ -6,6 +6,7 @@ import { DOMWrapper, flushPromises, mount, VueWrapper } from '@vue/test-utils';
 import { vi } from 'vitest';
 import { Router } from 'vue-router';
 
+vi.mock('@/composables/vault-factory');
 vi.mock('@/composables/tasting-notes');
 
 describe('TastingNotesPage.vue', () => {
