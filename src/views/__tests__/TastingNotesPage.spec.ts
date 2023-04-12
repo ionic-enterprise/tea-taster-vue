@@ -1,8 +1,8 @@
 import { useTastingNotes } from '@/composables/tasting-notes';
 import TastingNotesPage from '@/views/TastingNotesPage.vue';
-import { IonTitle, modalController } from '@ionic/vue';
+import { IonTitle, alertController, modalController } from '@ionic/vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { mount, VueWrapper } from '@vue/test-utils';
+import { DOMWrapper, flushPromises, mount, VueWrapper } from '@vue/test-utils';
 import { vi } from 'vitest';
 import { Router } from 'vue-router';
 
@@ -97,6 +97,61 @@ describe('TastingNotesPage.vue', () => {
       const button = wrapper.findComponent('[data-testid="add-note-button"]');
       await button.trigger('click');
       expect(modal.present).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('deleting a note', () => {
+    let alert: { present: () => Promise<void>; onDidDismiss: () => Promise<{ role: string }> };
+    let button: DOMWrapper<Element>;
+    beforeEach(async () => {
+      alert = {
+        present: vi.fn().mockResolvedValue(undefined),
+        onDidDismiss: vi.fn().mockResolvedValue({ role: 'unknown' }),
+      };
+      alertController.create = vi.fn().mockResolvedValue(alert);
+      const wrapper = await mountView();
+      const buttons = wrapper.findAll('[data-testid="delete-button"]');
+      button = buttons[1];
+    });
+
+    it('displays an alert', async () => {
+      await button.trigger('click');
+      await flushPromises();
+      expect(alert.present).toHaveReturnedTimes(1);
+    });
+
+    describe('when the user answers yes', () => {
+      beforeEach(() => {
+        alert.onDidDismiss = vi.fn().mockResolvedValue({ role: 'yes' });
+      });
+
+      it('removes the note', async () => {
+        const { remove } = useTastingNotes();
+        await button.trigger('click');
+        await flushPromises();
+        expect(remove).toHaveBeenCalledTimes(1);
+        expect(remove).toHaveBeenCalledWith({
+          id: 314159,
+          brand: 'Lipton',
+          name: 'Yellow Label',
+          teaCategoryId: 2,
+          rating: 1,
+          notes: 'Very acidic, even as dark teas go, OK for iced tea, horrible for any other application',
+        });
+      });
+    });
+
+    describe('when the user answers no', () => {
+      beforeEach(() => {
+        alert.onDidDismiss = vi.fn().mockResolvedValue({ role: 'no' });
+      });
+
+      it('does not remove the note', async () => {
+        const { remove } = useTastingNotes();
+        await button.trigger('click');
+        await flushPromises();
+        expect(remove).not.toHaveBeenCalled();
+      });
     });
   });
 });

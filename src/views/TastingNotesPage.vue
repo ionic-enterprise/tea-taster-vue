@@ -13,7 +13,7 @@
         </ion-toolbar>
       </ion-header>
 
-      <ion-list data-testid="notes-list">
+      <ion-list ref="notesList" data-testid="notes-list">
         <ion-item-sliding v-for="note of notes" :key="note.id">
           <ion-item button @click="presentNoteEditor($event, note.id)">
             <ion-label>
@@ -23,7 +23,9 @@
           </ion-item>
 
           <ion-item-options>
-            <ion-item-option color="danger" @click="remove(note)"> Delete </ion-item-option>
+            <ion-item-option color="danger" @click="removeNote(note)" data-testid="delete-button">
+              Delete
+            </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
       </ion-list>
@@ -53,14 +55,17 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  alertController,
   modalController,
 } from '@ionic/vue';
 import { add } from 'ionicons/icons';
 import AppTastingNoteEditor from '@/components/AppTastingNoteEditor.vue';
 import { useTastingNotes } from '@/composables/tasting-notes';
 import { ref } from 'vue';
+import { TastingNote } from '@/models';
 
 const page = ref(null);
+const notesList = ref(null);
 const { notes, refresh, remove } = useTastingNotes();
 
 const presentNoteEditor = async (evt: Event, noteId?: number) => {
@@ -73,6 +78,26 @@ const presentNoteEditor = async (evt: Event, noteId?: number) => {
     },
   });
   modal.present();
+};
+
+const removeNote = async (note: TastingNote) => {
+  const alert = await alertController.create({
+    header: 'Remove Note',
+    subHeader: 'This action cannot be undone!',
+    message: 'Are you sure you want to remove this note?',
+    buttons: [
+      { text: 'Yes', role: 'yes' },
+      { text: 'No', role: 'no' },
+    ],
+  });
+  await alert.present();
+  const { role } = await alert.onDidDismiss();
+  if (role === 'yes') {
+    await remove(note);
+  }
+  if (notesList.value) {
+    (notesList.value as any).$el.closeSlidingItems();
+  }
 };
 
 refresh();
