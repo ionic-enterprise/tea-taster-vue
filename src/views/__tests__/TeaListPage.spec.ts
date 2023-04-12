@@ -1,4 +1,3 @@
-import { useAuth } from '@/composables/auth';
 import { useTea } from '@/composables/tea';
 import TeaListPage from '@/views/TeaListPage.vue';
 import { IonCard, IonTitle } from '@ionic/vue';
@@ -6,7 +5,6 @@ import { mount, VueWrapper } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Router, createRouter, createWebHistory } from 'vue-router';
 
-vi.mock('@/composables/auth');
 vi.mock('@/composables/tea');
 
 describe('tea list page', () => {
@@ -156,26 +154,6 @@ describe('tea list page', () => {
       cards[3].trigger('click');
       expect(router.push).toHaveBeenCalledTimes(1);
       expect(router.push).toHaveBeenCalledWith('/tabs/teas/tea/4');
-    });
-  });
-
-  describe('logout button', () => {
-    it('performs a logout', async () => {
-      const { logout } = useAuth();
-      const wrapper = await mountView();
-      const button = wrapper.find('[data-testid="logout-button"]');
-      router.replace = vi.fn();
-      await button.trigger('click');
-      expect(logout).toHaveBeenCalledTimes(1);
-    });
-
-    it('navigates to the login page', async () => {
-      const wrapper = await mountView();
-      const button = wrapper.find('[data-testid="logout-button"]');
-      router.replace = vi.fn();
-      await button.trigger('click');
-      expect(router.replace).toHaveBeenCalledTimes(1);
-      expect(router.replace).toHaveBeenCalledWith('/login');
     });
   });
 });

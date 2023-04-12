@@ -1,6 +1,11 @@
 {
   "name": "tea-taster",
   "description": "Tea Tasting Notes",
+  "author": {
+    "name": "Ionic Customer Success Team",
+    "email": "support@ionic.io",
+    "url": "https://ionic.io"
+  },
   "private": true,
   "version": "0.0.1",
   "type": "module",
