@@ -6,6 +6,15 @@
         <ion-button data-testid="cancel-button" @click="cancel"> Cancel </ion-button>
       </ion-buttons>
       <ion-buttons slot="end">
+        <ion-button
+          id="share-button"
+          data-testid="share-button"
+          v-if="sharingIsAvailable"
+          :disabled="!allowShare"
+          @click="share()"
+        >
+          <ion-icon slot="icon-only" :icon="shareOutline"></ion-icon>
+        </ion-button>
         <ion-button :strong="true" :disabled="formIsInvalid" data-testid="submit-button" @click="submit">{{
           buttonText
         }}</ion-button>
@@ -79,8 +88,10 @@ import {
   IonTextarea,
   IonTitle,
   IonToolbar,
+  isPlatform,
   modalController,
 } from '@ionic/vue';
+import { shareOutline } from 'ionicons/icons';
 import { computed } from 'vue';
 import { useForm, useField } from 'vee-validate';
 import { number as yupNumber, object as yupObject, string as yupString } from 'yup';
@@ -88,7 +99,18 @@ import { useTea } from '@/composables/tea';
 import AppRating from './AppRating.vue';
 import { useTastingNotes } from '@/composables/tasting-notes';
 import { TastingNote } from '@/models';
+import { Share } from '@capacitor/share';
 
+const allowShare = computed(() => !!(brand.value && name.value && rating.value));
+const sharingIsAvailable = isPlatform('hybrid');
+const share = async (): Promise<void> => {
+  await Share.share({
+    title: `${brand.value}: ${name.value}`,
+    text: `I gave ${brand.value}: ${name.value} ${rating.value} stars on the Tea Taster app`,
+    dialogTitle: 'Share your tasting note',
+    url: 'https://tea-taster-training.web.app',
+  });
+};
 const { refresh, teas } = useTea();
 
 const props = defineProps({

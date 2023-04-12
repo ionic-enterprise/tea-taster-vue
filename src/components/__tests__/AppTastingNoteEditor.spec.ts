@@ -4,10 +4,17 @@ import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import waitForExpect from 'wait-for-expect';
 import { useTastingNotes } from '@/composables/tasting-notes';
-import { IonTitle, modalController } from '@ionic/vue';
+import { Share } from '@capacitor/share';
+import { IonTitle, isPlatform, modalController } from '@ionic/vue';
 
+vi.mock('@capacitor/share');
 vi.mock('@/composables/tasting-notes');
 vi.mock('@/composables/tea');
+
+vi.mock('@ionic/vue', async () => {
+  const actual = (await vi.importActual('@ionic/vue')) as any;
+  return { ...actual, isPlatform: vi.fn() };
+});
 
 describe('AppTastingNoteEditor.vue', () => {
   let wrapper: VueWrapper<any>;
@@ -38,6 +45,7 @@ describe('AppTastingNoteEditor.vue', () => {
       },
     ];
     vi.resetAllMocks();
+    (isPlatform as Mock).mockImplementation((key: string) => key === 'hybrid');
     wrapper = mount(AppTastingNoteEditor);
   });
 
@@ -254,6 +262,74 @@ describe('AppTastingNoteEditor.vue', () => {
       expect(modalController.dismiss).not.toHaveBeenCalled();
       await button.trigger('click');
       expect(modalController.dismiss).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('share button', () => {
+    describe('in a web context', () => {
+      beforeEach(() => {
+        (isPlatform as Mock).mockImplementation((key: string) => key !== 'hybrid');
+      });
+
+      afterEach(() => {
+        (isPlatform as Mock).mockImplementation((key: string) => key === 'hybrid');
+      });
+
+      it('does not exist', () => {
+        const modal = mount(AppTastingNoteEditor);
+        const button = modal.findComponent('[data-testid="share-button"]');
+        expect(button.exists()).toBe(false);
+      });
+    });
+
+    describe('in a mobile context', () => {
+      it('exists', () => {
+        const button = wrapper.findComponent('[data-testid="share-button"]');
+        expect(button.exists()).toBe(true);
+      });
+
+      it('is disabled until enough information is entered', async () => {
+        const button = wrapper.findComponent('[data-testid="share-button"]');
+        const brand = wrapper.findComponent('[data-testid="brand-input"]');
+        const name = wrapper.findComponent('[data-testid="name-input"]');
+        const rating = wrapper.findComponent('[data-testid="rating-input"]');
+
+        await flushPromises();
+        await waitForExpect(() => expect((button.element as HTMLIonButtonElement).disabled).toBe(true));
+
+        await brand.setValue('foobar');
+        await flushPromises();
+        await waitForExpect(() => expect((button.element as HTMLIonButtonElement).disabled).toBe(true));
+
+        await name.setValue('mytea');
+        await flushPromises();
+        await waitForExpect(() => expect((button.element as HTMLIonButtonElement).disabled).toBe(true));
+
+        await rating.setValue(2);
+        await flushPromises();
+        await waitForExpect(() => expect((button.element as HTMLIonButtonElement).disabled).toBe(false));
+      });
+
+      it('calls the share plugin when pressed', async () => {
+        const button = wrapper.find('[data-testid="share-button"]');
+        const brand = wrapper.findComponent('[data-testid="brand-input"]');
+        const name = wrapper.findComponent('[data-testid="name-input"]');
+        const rating = wrapper.findComponent('[data-testid="rating-input"]');
+
+        await brand.setValue('foobar');
+        await name.setValue('mytea');
+        await rating.setValue(2);
+
+        await button.trigger('click');
+
+        expect(Share.share).toHaveBeenCalledTimes(1);
+        expect(Share.share).toHaveBeenCalledWith({
+          title: 'foobar: mytea',
+          text: 'I gave foobar: mytea 2 stars on the Tea Taster app',
+          dialogTitle: 'Share your tasting note',
+          url: 'https://tea-taster-training.web.app',
+        });
+      });
     });
   });
 });
