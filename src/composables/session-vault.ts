@@ -1,10 +1,10 @@
-import { Session } from '@/models';
-import { useVaultFactory } from '@/composables/vault-factory';
-import { BiometricPermissionState, Device, DeviceSecurityType, VaultType } from '@ionic-enterprise/identity-vault';
-import router from '@/router';
-import { isPlatform, modalController } from '@ionic/vue';
 import AppPinDialog from '@/components/AppPinDialog.vue';
+import { useVaultFactory } from '@/composables/vault-factory';
+import router from '@/router';
 import { Preferences } from '@capacitor/preferences';
+import { AuthResult } from '@ionic-enterprise/auth';
+import { BiometricPermissionState, Device, DeviceSecurityType, VaultType } from '@ionic-enterprise/identity-vault';
+import { isPlatform, modalController } from '@ionic/vue';
 
 export type UnlockMode =
   | 'Biometrics'
@@ -16,7 +16,7 @@ export type UnlockMode =
 const sessionKey = 'session';
 const hideInBackgroundKey = 'hide-in-background';
 const modeKey = 'LastUnlockMode';
-let session: Session | null | undefined;
+let session: AuthResult | null | undefined;
 
 const { createVault } = useVaultFactory();
 const vault = createVault({
@@ -57,7 +57,7 @@ const canUseBiometrics = async (): Promise<boolean> => isPlatform('hybrid') && (
 const canUseCustomPasscode = (): boolean => isPlatform('hybrid');
 const canUseSystemPasscode = async (): Promise<boolean> => isPlatform('hybrid') && (await Device.isSystemPasscodeSet());
 
-const getSession = async (): Promise<Session | null | undefined> => {
+const getSession = async (): Promise<AuthResult | null | undefined> => {
   if (!session) {
     session = await vault.getValue(sessionKey);
   }
@@ -74,7 +74,7 @@ const isHidingContentsInBackground = async (): Promise<boolean> => {
   return JSON.parse(value || 'false');
 };
 
-const setSession = async (s: Session): Promise<void> => {
+const setSession = async (s: AuthResult): Promise<void> => {
   session = s;
   return vault.setValue(sessionKey, s);
 };

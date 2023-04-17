@@ -1,8 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import router from '@/router';
 import { useSessionVault } from '@/composables/session-vault';
-
-const { clearSession, getSession } = useSessionVault();
+import { useAuth } from '@/composables/auth';
 
 const baseURL = 'https://cs-demo-api.herokuapp.com';
 
@@ -15,9 +14,10 @@ const client = axios.create({
 });
 
 client.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
-  const session = await getSession();
-  if (session && session.token && config.headers) {
-    config.headers.Authorization = `Bearer ${session.token}`;
+  const { getAccessToken } = useAuth();
+  const token = await getAccessToken();
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
@@ -26,6 +26,7 @@ client.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.status === 401) {
+      const { clearSession } = useSessionVault();
       clearSession().then(() => router.replace('/login'));
     }
     return Promise.reject(error);

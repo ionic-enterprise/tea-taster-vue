@@ -2,6 +2,7 @@ import { useSessionVault } from '@/composables/session-vault';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 import StartPage from '@/views/StartPage.vue';
+import { useAuth } from '@/composables/auth';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,6 +19,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/unlock',
     name: 'Unlock',
     component: () => import('@/views/UnlockPage.vue'),
+  },
+  {
+    path: '/auth-action-complete',
+    name: 'Auth Action Complete',
+    component: () => import('@/views/AuthActionCompletePage.vue'),
   },
   {
     path: '/tabs/',
@@ -61,9 +67,8 @@ const checkAuthStatus = async (
   next: NavigationGuardNext
 ) => {
   if (to.matched.some((r) => r.meta.requiresAuth)) {
-    const { getSession } = useSessionVault();
-    const session = await getSession();
-    if (!session) {
+    const { isAuthenticated } = useAuth();
+    if (!(await isAuthenticated())) {
       return next('/login');
     }
   }
