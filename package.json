@@ -11,7 +11,8 @@
   "type": "module",
   "scripts": {
     "assets": "capacitor-assets generate --iconBackgroundColor '#f1ebe1' --splashBackgroundColor '#f1ebe1' --iconBackgroundColorDark '#110b00' --splashBackgroundColorDark '#110b00'",
-    "build": "vue-tsc && vite build && cap sync",
+    "build": "npm run build:web && cap sync",
+    "build:web": "vue-tsc && vite build",
     "dev": "vite",
     "lint": "eslint",
     "prepare": "husky install",
