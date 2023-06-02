@@ -45,7 +45,7 @@ Specific key commits are tagged in case you would like to examine the state of t
 - `end-of-training` - This is the end of the standard three day [training](https://ionic-training-decks.firebaseapp.com/course/framework/tabs/vue/page/0) and does not contain any of the extra credit exercises, minor bug fixes, or minor modifications to the training.
 - `end-basic-extra-credit` - This commit incorporates all of the extra credit assignments. Each assignment, though, has its own commit(s).
 - `identity-vault` - This commit replaces the basic session storage with Identity Vault.
-- `auth-connect` - This commit replaces the basic authentication scheme with using OIDC via Auth Connect for better security.
+- `auth-connect` - In addition to using Identity Vault for session storage, this commit replaces the basic authentication scheme with using OIDC via Auth Connect for better security.
 
 ### Branching Refresher
 
