@@ -9,8 +9,8 @@ If you would like to build this application yourself, do the following:
 - Clone this repo
 - `cd tea-taster-vue`
 - Do one of the following:
-  - **Best**: make sure you have purchased access to Identity Vault and Auth Connect. Copy a `.npmrc` file with your access key to the root of this project.
-  - **Alternate**: create a banch ([see below](#branching-refresher)) at the appropriate commit or tag prior Identity Vault and Auth Connect being added to the application.
+  - **Best**: Make sure you have access to Identity Vault and Auth Connect, and have previously registered an application using the [`ionic enterprise register`](https://ionicframework.com/docs/cli/commands/enterprise-register) command (which generates an .npmrc file). Copy the generated file to the root of this project.
+  - **Alternate**: create a banch ([see below](#branching-refresher)) at the appropriate commit or tag prior to Identity Vault and Auth Connect being added to the application.
 - `npm i`
 - `npm run build`
 - `npx cap sync`
@@ -42,7 +42,7 @@ Each step of the training has its own commit within the `main` branch. You shoul
 
 Specific key commits are tagged in case you would like to examine the state of the project at specific key events:
 
-- `end-of-training` - This is the end of the standard three day training and does not contain any of the extra credit exercises, minor bug fixes, or minor modifications to the training.
+- `end-of-training` - This is the end of the standard three day [training](https://ionic-training-decks.firebaseapp.com/course/framework/tabs/vue/page/0) and does not contain any of the extra credit exercises, minor bug fixes, or minor modifications to the training.
 - `end-basic-extra-credit` - This commit incorporates all of the extra credit assignments. Each assignment, though, has its own commit(s).
 - `identity-vault` - This commit replaces the basic session storage with Identity Vault.
 - `auth-connect` - This commit replaces the basic authentication scheme with using OIDC via Auth Connect for better security.
