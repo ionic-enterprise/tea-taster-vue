@@ -3,7 +3,11 @@ import { AuthConnect, AuthResult, CognitoProvider, ProviderOptions } from '@ioni
 import { isPlatform } from '@ionic/vue';
 
 const isMobile = isPlatform('hybrid');
-const url = isMobile ? 'msauth://auth-action-complete' : 'http://localhost:8100/auth-action-complete';
+const url = isMobile
+  ? 'msauth://auth-action-complete'
+  : import.meta.env.PROD
+  ? 'https://tea-taster-vue.web.app/auth-action-complete'
+  : 'http://localhost:8100/auth-action-complete';
 
 const options: ProviderOptions = {
   clientId: '64p9c53l5thd5dikra675suvq9',
