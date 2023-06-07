@@ -3,13 +3,20 @@ import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from '@/App.vue';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { useSessionVault } from '@/composables/session-vault';
+import { useRegisterSW } from 'virtual:pwa-register/vue';
+import { ref } from 'vue';
 
 vi.mock('@capacitor/splash-screen');
 vi.mock('@/composables/session-vault');
+vi.mock('virtual:pwa-register/vue');
 
 describe('App.vue', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    (useRegisterSW as Mock).mockReturnValue({
+      needRefresh: ref(false),
+      updateServiceWorker: vi.fn(),
+    });
   });
 
   it('renders', () => {
@@ -29,5 +36,19 @@ describe('App.vue', () => {
     await flushPromises();
     expect(hideContentsInBackground).toHaveBeenCalledOnce();
     expect(hideContentsInBackground).toHaveBeenCalledWith(value);
+  });
+
+  it('registers the service worker', () => {
+    shallowMount(App);
+    expect(useRegisterSW).toHaveBeenCalledTimes(1);
+  });
+
+  it('updates the service worker as needed', async () => {
+    const { needRefresh, updateServiceWorker } = useRegisterSW();
+    shallowMount(App);
+    expect(updateServiceWorker).not.toHaveBeenCalled();
+    needRefresh.value = true;
+    await flushPromises();
+    expect(updateServiceWorker).toHaveBeenCalledTimes(1);
   });
 });
