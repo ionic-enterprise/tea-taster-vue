@@ -8,12 +8,11 @@
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { useSessionVault } from '@/composables/session-vault';
-
 import { watchEffect } from 'vue';
 import { useRegisterSW } from 'virtual:pwa-register/vue';
+import { useConfirmationDialog } from '@/composables/confirmation-dialog';
 
-const interval = 6 * 1000;
-
+const interval = 60 * 60 * 1000;
 const { needRefresh, updateServiceWorker } = useRegisterSW({
   onRegistered(r) {
     r &&
@@ -23,8 +22,15 @@ const { needRefresh, updateServiceWorker } = useRegisterSW({
   },
 });
 
-watchEffect(() => {
-  if (needRefresh.value) {
+const { confirm } = useConfirmationDialog();
+watchEffect(async () => {
+  if (
+    needRefresh.value &&
+    (await confirm(
+      'Update Available',
+      'An update is available for this application. Would you like to refresh this application to get the update?'
+    ))
+  ) {
     updateServiceWorker();
   }
 });

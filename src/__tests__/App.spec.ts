@@ -4,9 +4,11 @@ import App from '@/App.vue';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { useSessionVault } from '@/composables/session-vault';
 import { useRegisterSW } from 'virtual:pwa-register/vue';
+import { useConfirmationDialog } from '@/composables/confirmation-dialog';
 import { ref } from 'vue';
 
 vi.mock('@capacitor/splash-screen');
+vi.mock('@/composables/confirmation-dialog');
 vi.mock('@/composables/session-vault');
 vi.mock('virtual:pwa-register/vue');
 
@@ -43,12 +45,35 @@ describe('App.vue', () => {
     expect(useRegisterSW).toHaveBeenCalledTimes(1);
   });
 
-  it('updates the service worker as needed', async () => {
+  it('asks to update the service worker as needed', async () => {
+    const { needRefresh } = useRegisterSW();
+    const { confirm } = useConfirmationDialog();
+    shallowMount(App);
+    expect(confirm).not.toHaveBeenCalled();
+    needRefresh.value = true;
+    await flushPromises();
+    expect(confirm).toHaveBeenCalledTimes(1);
+  });
+
+  it('updates the app on confirm', async () => {
     const { needRefresh, updateServiceWorker } = useRegisterSW();
+    const { confirm } = useConfirmationDialog();
+    (confirm as Mock).mockResolvedValue(true);
     shallowMount(App);
     expect(updateServiceWorker).not.toHaveBeenCalled();
     needRefresh.value = true;
     await flushPromises();
     expect(updateServiceWorker).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not update the app if the user does not confirm', async () => {
+    const { needRefresh, updateServiceWorker } = useRegisterSW();
+    const { confirm } = useConfirmationDialog();
+    (confirm as Mock).mockResolvedValue(false);
+    shallowMount(App);
+    expect(updateServiceWorker).not.toHaveBeenCalled();
+    needRefresh.value = true;
+    await flushPromises();
+    expect(updateServiceWorker).not.toHaveBeenCalled();
   });
 });
