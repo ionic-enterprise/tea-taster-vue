@@ -1,10 +1,10 @@
-import { flushPromises, shallowMount } from '@vue/test-utils';
-import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from '@/App.vue';
-import { SplashScreen } from '@capacitor/splash-screen';
-import { useSessionVault } from '@/composables/session-vault';
-import { useRegisterSW } from 'virtual:pwa-register/vue';
 import { useConfirmationDialog } from '@/composables/confirmation-dialog';
+import { useSessionVault } from '@/composables/session-vault';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { flushPromises, shallowMount } from '@vue/test-utils';
+import { useRegisterSW } from 'virtual:pwa-register/vue';
+import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 
 vi.mock('@capacitor/splash-screen');

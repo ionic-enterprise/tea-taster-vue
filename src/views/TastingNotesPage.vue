@@ -55,11 +55,11 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  alertController,
   modalController,
 } from '@ionic/vue';
 import { add } from 'ionicons/icons';
 import AppTastingNoteEditor from '@/components/AppTastingNoteEditor.vue';
+import { useConfirmationDialog } from '@/composables/confirmation-dialog';
 import { useTastingNotes } from '@/composables/tasting-notes';
 import { ref } from 'vue';
 import { TastingNote } from '@/models';
@@ -81,18 +81,8 @@ const presentNoteEditor = async (evt: Event, noteId?: number) => {
 };
 
 const removeNote = async (note: TastingNote) => {
-  const alert = await alertController.create({
-    header: 'Remove Note',
-    subHeader: 'This action cannot be undone!',
-    message: 'Are you sure you want to remove this note?',
-    buttons: [
-      { text: 'Yes', role: 'yes' },
-      { text: 'No', role: 'no' },
-    ],
-  });
-  await alert.present();
-  const { role } = await alert.onDidDismiss();
-  if (role === 'yes') {
+  const { confirm } = useConfirmationDialog();
+  if (await confirm('Remove Note', 'Are you sure you want to remove this note? This action cannot be undone!')) {
     await remove(note);
   }
   if (notesList.value) {
