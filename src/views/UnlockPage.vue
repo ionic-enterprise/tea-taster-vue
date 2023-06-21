@@ -30,13 +30,16 @@
 import { useRouter } from 'vue-router';
 import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonIcon, IonPage } from '@ionic/vue';
 import { arrowRedoOutline, lockOpenOutline } from 'ionicons/icons';
+import { useAuth } from '@/composables/auth';
 import { useSessionVault } from '@/composables/session-vault';
 
 const router = useRouter();
 const { clearSession, getSession } = useSessionVault();
 
 const redoClicked = async (): Promise<void> => {
+  const { logout } = useAuth();
   await clearSession();
+  await logout();
   await router.replace('/login');
 };
 

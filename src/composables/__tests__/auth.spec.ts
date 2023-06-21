@@ -322,12 +322,14 @@ describe('useAuth', () => {
       beforeEach(() => {
         const { getSession } = useSessionVault();
         (getSession as Mock).mockResolvedValue(undefined);
+        (AuthConnect.buildAuthResult as Mock).mockResolvedValue({ name: 'generated auth result' });
       });
 
-      it('does not call logout ', async () => {
+      it('calls logout with a generated auth result', async () => {
         const { logout } = useAuth();
         await logout();
-        expect(AuthConnect.logout).not.toHaveBeenCalled();
+        expect(AuthConnect.logout).toHaveBeenCalledTimes(1);
+        expect(AuthConnect.logout).toHaveBeenCalledWith(expect.any(CognitoProvider), { name: 'generated auth result' });
       });
     });
 

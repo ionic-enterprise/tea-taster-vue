@@ -1,10 +1,12 @@
+import { useAuth } from '@/composables/auth';
 import { useSessionVault } from '@/composables/session-vault';
 import UnlockPage from '@/views/UnlockPage.vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { VueWrapper, mount } from '@vue/test-utils';
+import { VueWrapper, flushPromises, mount } from '@vue/test-utils';
 import { Mock, describe, expect, it, vi } from 'vitest';
 import { Router } from 'vue-router';
 
+vi.mock('@/composables/auth');
 vi.mock('@/composables/session-vault');
 
 let router: Router;
@@ -24,6 +26,10 @@ const mountView = async (): Promise<VueWrapper<any>> => {
 };
 
 describe('UnlockPage.vue', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('displays an unlock prompt', async () => {
     const wrapper = await mountView();
     const prompt = wrapper.find('[data-testid="unlock-button"]');
@@ -71,13 +77,24 @@ describe('UnlockPage.vue', () => {
       const wrapper = await mountView();
       const button = wrapper.find('[data-testid="redo-button"]');
       await button.trigger('click');
+      await flushPromises();
       expect(clearSession).toHaveBeenCalledTimes(1);
+    });
+
+    it('logs the user out', async () => {
+      const { logout } = useAuth();
+      const wrapper = await mountView();
+      const button = wrapper.find('[data-testid="redo-button"]');
+      await button.trigger('click');
+      await flushPromises();
+      expect(logout).toHaveBeenCalledTimes(1);
     });
 
     it('navigates to the login page', async () => {
       const wrapper = await mountView();
       const button = wrapper.find('[data-testid="redo-button"]');
       await button.trigger('click');
+      await flushPromises();
       expect(router.replace).toHaveBeenCalledTimes(1);
       expect(router.replace).toHaveBeenCalledWith('/login');
     });

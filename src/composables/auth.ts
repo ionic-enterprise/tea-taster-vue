@@ -92,11 +92,12 @@ export const useAuth = () => {
     logout: async () => {
       await initialize();
       const { clearSession, getSession } = useSessionVault();
-      const authResult = await getSession();
-      if (authResult) {
-        await AuthConnect.logout(provider, authResult);
-        await clearSession();
+      let authResult = await getSession();
+      if (!authResult) {
+        authResult = await AuthConnect.buildAuthResult(provider, options, {});
       }
+      await AuthConnect.logout(provider, authResult);
+      await clearSession();
     },
   };
 };
