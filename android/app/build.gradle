@@ -1,6 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/NOTICE', 'META-INF/LICENSE', 'META-INF/NOTICE', 'META-INF/LICENSE']
+        }
+    }
     namespace "io.ionic.teatastervue"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -16,7 +22,7 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
         manifestPlaceholders = [
-                'AUTH_URL_SCHEME': 'msauth'
+                'AUTH_URL_SCHEME': 'io.ionic.teataster'
         ]
     }
     buildTypes {

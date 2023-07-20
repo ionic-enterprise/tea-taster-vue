@@ -4,7 +4,7 @@ import { isPlatform } from '@ionic/vue';
 
 const isMobile = isPlatform('hybrid');
 const url = isMobile
-  ? 'msauth://auth-action-complete'
+  ? 'io.ionic.teataster://auth-action-complete'
   : import.meta.env.PROD
   ? 'https://tea-taster-vue.web.app/auth-action-complete'
   : 'http://localhost:8100/auth-action-complete';

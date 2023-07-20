@@ -28,7 +28,7 @@ watchEffect(async () => {
     needRefresh.value &&
     (await confirm(
       'Update Available',
-      'An update is available for this application. Would you like to refresh this application to get the update?'
+      'An update is available for this application. Would you like to refresh this application to get the update?',
     ))
   ) {
     updateServiceWorker();

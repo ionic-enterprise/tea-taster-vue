@@ -30,7 +30,7 @@ client.interceptors.response.use(
       clearSession().then(() => router.replace('/login'));
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export const useBackendAPI = () => {

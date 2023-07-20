@@ -64,7 +64,7 @@ const routes: Array<RouteRecordRaw> = [
 const checkAuthStatus = async (
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
-  next: NavigationGuardNext
+  next: NavigationGuardNext,
 ) => {
   if (to.matched.some((r) => r.meta.requiresAuth)) {
     const { isAuthenticated } = useAuth();

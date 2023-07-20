@@ -303,7 +303,7 @@ describe('useSessionVault', () => {
           await setUnlockMode(unlockMode);
           expect(Device.showBiometricPrompt).not.toHaveBeenCalled();
         });
-      }
+      },
     );
 
     it.each([
@@ -326,7 +326,7 @@ describe('useSessionVault', () => {
         expect(mockVault.updateConfig).toHaveBeenCalledWith(expectedConfig);
         expect(Preferences.set).toHaveBeenCalledTimes(1);
         expect(Preferences.set).toHaveBeenCalledWith({ key: 'LastUnlockMode', value: unlockMode });
-      }
+      },
     );
   });
 
@@ -355,7 +355,7 @@ describe('useSessionVault', () => {
         (Preferences.get as Mock).mockResolvedValue({ value: mode });
         const { canUnlock } = useSessionVault();
         expect(await canUnlock()).toBe(expected);
-      }
+      },
     );
   });
 
