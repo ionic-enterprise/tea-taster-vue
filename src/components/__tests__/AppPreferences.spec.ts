@@ -1,10 +1,9 @@
-import { DeviceSecurityType, VaultType } from '@ionic-enterprise/identity-vault';
-import { VueWrapper, flushPromises, mount } from '@vue/test-utils';
-import { Mock, describe, expect, it, vi } from 'vitest';
 import AppPreferences from '@/components/AppPreferences.vue';
 import { useAuth } from '@/composables/auth';
-import { modalController } from '@ionic/vue';
 import { UnlockMode, useSessionVault } from '@/composables/session-vault';
+import { modalController } from '@ionic/vue';
+import { VueWrapper, flushPromises, mount } from '@vue/test-utils';
+import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const router = {
   replace: vi.fn(),

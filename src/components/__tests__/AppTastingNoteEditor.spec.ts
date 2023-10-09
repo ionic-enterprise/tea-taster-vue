@@ -1,7 +1,7 @@
 import AppTastingNoteEditor from '@/components/AppTastingNoteEditor.vue';
 import { useTea } from '@/composables/tea';
 import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import waitForExpect from 'wait-for-expect';
 import { useTastingNotes } from '@/composables/tasting-notes';
 import { Share } from '@capacitor/share';

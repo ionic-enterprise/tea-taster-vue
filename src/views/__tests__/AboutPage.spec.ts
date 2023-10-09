@@ -2,7 +2,7 @@ import AboutPage from '@/views/AboutPage.vue';
 import { IonTitle } from '@ionic/vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { mount, VueWrapper } from '@vue/test-utils';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Router } from 'vue-router';
 
 // Required by AppPreferences

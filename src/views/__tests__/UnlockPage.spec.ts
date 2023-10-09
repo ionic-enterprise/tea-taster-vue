@@ -3,7 +3,7 @@ import { useSessionVault } from '@/composables/session-vault';
 import UnlockPage from '@/views/UnlockPage.vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { VueWrapper, flushPromises, mount } from '@vue/test-utils';
-import { Mock, describe, expect, it, vi } from 'vitest';
+import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Router } from 'vue-router';
 
 vi.mock('@/composables/auth');

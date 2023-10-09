@@ -4,7 +4,7 @@ import TastingNotesPage from '@/views/TastingNotesPage.vue';
 import { IonTitle, modalController } from '@ionic/vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { DOMWrapper, VueWrapper, flushPromises, mount } from '@vue/test-utils';
-import { Mock, vi } from 'vitest';
+import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Router } from 'vue-router';
 
 vi.mock('@/composables/confirmation-dialog');

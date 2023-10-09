@@ -1,7 +1,7 @@
 import AuthActionCompletePage from '@/views/AuthActionCompletePage.vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { VueWrapper, mount } from '@vue/test-utils';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Router } from 'vue-router';
 
 // Required by AppPreferences

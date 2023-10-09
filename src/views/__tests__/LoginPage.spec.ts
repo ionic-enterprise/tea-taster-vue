@@ -1,7 +1,7 @@
 import { useAuth } from '@/composables/auth';
 import LoginPage from '@/views/LoginPage.vue';
 import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { createRouter, createWebHistory, Router } from 'vue-router';
 
 vi.mock('@/composables/auth');
